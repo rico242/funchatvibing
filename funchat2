@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunChat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <header>
+            <h1>FunChat</h1>
+            <button id="create-room">Create Room</button>
+        </header>
+        <nav>
+            <ul id="room-list">
+                <li><a href="#admin-room">Admin Room</a></li>
+                <!-- User-created rooms will be added here -->
+            </ul>
+        </nav>
+        <main>
+            <section id="chat-room">
+                <h2>Chat Room</h2>
+                <div id="messages"></div>
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button id="send-message">Send</button>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.chat-container {
+    width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header, nav, main {
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#messages {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#message-input {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.online { background-color: green; }
+.busy { background-color: red; }
+.away { background-color: yellow; }
+.offline { background-color: gray; }
+const createRoomButton = document.getElementById('create-room');
+const roomList = document.getElementById('room-list');
+const sendMessageButton = document.getElementById('send-message');
+const messageInput = document.getElementById('message-input');
+const messages = document.getElementById('messages');
+
+createRoomButton.addEventListener('click', () => {
+    const roomName = prompt('Enter room name:');
+    if (roomName) {
+        const newRoom = document.createElement('li');
+        newRoom.innerHTML = `<a href="#${roomName}">${roomName}</a>`;
+        roomList.appendChild(newRoom);
+    }
+});
+
+sendMessageButton.addEventListener('click', () => {
+    const message = messageInput.value.trim();
+    if (message) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        messages.appendChild(messageElement);
+        messageInput.value = '';
+    }
+});
+
+function setStatusIndicator(status) {
+    const statusIndicator = document.createElement('span');
+    statusIndicator.classList.add('status-indicator', status);
+    return statusIndicator;
+}
+
+// Example usage
+const userStatus = setStatusIndicator('online');
+document.body.appendChild(userStatus);
+
+const adminStatus = setStatusIndicator('busy');
+document.body.appendChild(adminStatus);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunChat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <header>
+            <h1>FunChat</h1>
+            <button id="create-room">Create Room</button>
+        </header>
+        <nav>
+            <ul id="room-list">
+                <li><a href="#admin-room">Admin Room</a></li>
+                <!-- User-created rooms will be added here -->
+            </ul>
+        </nav>
+        <main>
+            <section id="chat-room">
+                <h2>Chat Room</h2>
+                <div id="messages"></div>
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button id="send-message">Send</button>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.chat-container {
+    width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header, nav, main {
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#messages {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#message-input {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.online { background-color: green; }
+.busy { background-color: red; }
+.away { background-color: yellow; }
+.offline { background-color: gray; }
+
+.neumorphism-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #007bff #f0f0f0;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar {
+    width: 12px;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    border-radius: 10px;
+    border: 3px solid #f0f0f0;
+}
+const createRoomButton = document.getElementById('create-room');
+const roomList = document.getElementById('room-list');
+const sendMessageButton = document.getElementById('send-message');
+const messageInput = document.getElementById('message-input');
+const messages = document.getElementById('messages');
+
+createRoomButton.addEventListener('click', () => {
+    const roomName = prompt('Enter room name:');
+    if (roomName) {
+        const newRoom = document.createElement('li');
+        newRoom.innerHTML = `<a href="#${roomName}">${roomName}</a>`;
+        roomList.appendChild(newRoom);
+    }
+});
+
+sendMessageButton.addEventListener('click', () => {
+    const message = messageInput.value.trim();
+    if (message) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        messages.appendChild(messageElement);
+        messageInput.value = '';
+    }
+});
+
+function setStatusIndicator(status) {
+    const statusIndicator = document.createElement('span');
+    statusIndicator.classList.add('status-indicator', status);
+    return statusIndicator;
+}
+
+// Example usage
+const userStatus = setStatusIndicator('online');
+document.body.appendChild(userStatus);
+
+const adminStatus = setStatusIndicator('busy');
+document.body.appendChild(adminStatus);
+
+// Add friends, block friends, unblock friends
+function addFriend(username) {
+    console.log(`${username} added as a friend`);
+}
+
+function blockFriend(username) {
+    console.log(`${username} blocked`);
+}
+
+function unblockFriend(username) {
+    console.log(`${username} unblocked`);
+}
+
+// Machine learning for predicting user behavior and cyber threats
+function predictUserBehavior(userData) {
+    // Implement machine learning model here
+    console.log('Predicting user behavior...');
+}
+
+function detectCyberThreats(activityData) {
+    // Implement machine learning model here
+    console.log('Detecting cyber threats...');
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunChat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <header>
+            <h1>FunChat</h1>
+            <button id="create-room">Create Room</button>
+            <div class="notification-bell" id="notification-bell">
+                🔔
+                <span class="notification-count" id="notification-count">0</span>
+            </div>
+        </header>
+        <nav>
+            <ul id="room-list">
+                <li><a href="#admin-room">Admin Room</a></li>
+                <!-- User-created rooms will be added here -->
+            </ul>
+        </nav>
+        <main>
+            <section id="chat-room">
+                <h2>Chat Room</h2>
+                <div id="messages" class="neumorphism-scrollbar"></div>
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button id="send-message">Send</button>
+            </section>
+            <section id="private-messages">
+                <h2>Private Messages</h2>
+                <div id="private-messages-box" class="neumorphism-scrollbar"></div>
+                <input type="text" id="private-message-input" placeholder="Type a private message...">
+                <button id="send-private-message">Send</button>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.chat-container {
+    width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header, nav, main {
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#messages, #private-messages-box {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#message-input, #private-message-input {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.notification-bell {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.notification-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 12px;
+}
+
+.neumorphism-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #007bff #f0f0f0;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar {
+    width: 12px;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    border-radius: 10px;
+    border: 3px solid #f0f0f0;
+}
+const createRoomButton = document.getElementById('create-room');
+const roomList = document.getElementById('room-list');
+const sendMessageButton = document.getElementById('send-message');
+const messageInput = document.getElementById('message-input');
+const messages = document.getElementById('messages');
+const sendPrivateMessageButton = document.getElementById('send-private-message');
+const privateMessageInput = document.getElementById('private-message-input');
+const privateMessagesBox = document.getElementById('private-messages-box');
+const notificationBell = document.getElementById('notification-bell');
+const notificationCount = document.getElementById('notification-count');
+
+createRoomButton.addEventListener('click', () => {
+    const roomName = prompt('Enter room name:');
+    if (roomName) {
+        const newRoom = document.createElement('li');
+        newRoom.innerHTML = `<a href="#${roomName}">${roomName}</a>`;
+        roomList.appendChild(newRoom);
+    }
+});
+
+sendMessageButton.addEventListener('click', () => {
+    const message = messageInput.value.trim();
+    if (message) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        messages.appendChild(messageElement);
+        messageInput.value = '';
+    }
+});
+
+sendPrivateMessageButton.addEventListener('click', () => {
+    const privateMessage = privateMessageInput.value.trim();
+    if (privateMessage) {
+        const privateMessageElement = document.createElement('div');
+        privateMessageElement.textContent = privateMessage;
+        privateMessagesBox.appendChild(privateMessageElement);
+        privateMessageInput.value = '';
+        incrementNotificationCount();
+    }
+});
+
+function incrementNotificationCount() {
+    let count = parseInt(notificationCount.textContent);
+    count += 1;
+    notificationCount.textContent = count;
+}
+
+function setStatusIndicator(status) {
+    const statusIndicator = document.createElement('span');
+    statusIndicator.classList.add('status-indicator', status);
+    return statusIndicator;
+}
+
+// Example usage
+const userStatus = setStatusIndicator('online');
+document.body.appendChild(userStatus);
+
+const adminStatus = setStatusIndicator('busy');
+document.body.appendChild(adminStatus);
+
+// Add friends, block friends, unblock friends
+function addFriend(username) {
+    console.log(`${username} added as a friend`);
+}
+
+function blockFriend(username) {
+    console.log(`${username} blocked`);
+}
+
+function unblockFriend(username) {
+    console.log(`${username} unblocked`);
+}
+
+// Machine learning for predicting user behavior and cyber threats
+function predictUserBehavior(userData) {
+    // Implement machine learning model here
+    console.log('Predicting user behavior...');
+}
+
+function detectCyberThreats(activityData) {
+    // Implement machine learning model here
+    console.log('Detecting cyber threats...');
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunChat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <header>
+            <h1>FunChat</h1>
+            <button id="create-room">Create Room</button>
+            <div class="notification-bell" id="notification-bell">
+                🔔
+                <span class="notification-count" id="notification-count">0</span>
+            </div>
+        </header>
+        <nav>
+            <ul id="room-list">
+                <li><a href="#admin-room">Admin Room</a></li>
+                <!-- User-created rooms will be added here -->
+            </ul>
+        </nav>
+        <main>
+            <section id="chat-room">
+                <h2>Chat Room</h2>
+                <div id="messages" class="neumorphism-scrollbar"></div>
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button id="send-message">Send</button>
+            </section>
+            <section id="private-messages">
+                <h2>Private Messages</h2>
+                <div id="private-messages-box" class="neumorphism-scrollbar"></div>
+                <input type="text" id="private-message-input" placeholder="Type a private message...">
+                <button id="send-private-message">Send</button>
+            </section>
+        </main>
+        <div id="skeleton-screen" class="skeleton-screen">
+            <div class="skeleton-header"></div>
+            <div class="skeleton-content"></div>
+            <div class="skeleton-footer"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.chat-container {
+    width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header, nav, main {
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#messages, #private-messages-box {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#message-input, #private-message-input {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.notification-bell {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.notification-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 12px;
+}
+
+.neumorphism-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #007bff #f0f0f0;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar {
+    width: 12px;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    border-radius: 10px;
+    border: 3px solid #f0f0f0;
+}
+
+.skeleton-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.skeleton-header, .skeleton-content, .skeleton-footer {
+    width: 80%;
+    height: 20px;
+    background-color: #e0e0e0;
+    margin: 10px 0;
+    border-radius: 5px;
+    animation: pulse 1.5s infinite;
+}
+
+.skeleton-content {
+    height: 100px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { background-color: #e0e0e0; }
+    50% { background-color: #f0f0f0; }
+    100% { background-color: #e0e0e0; }
+}
+const createRoomButton = document.getElementById('create-room');
+const roomList = document.getElementById('room-list');
+const sendMessageButton = document.getElementById('send-message');
+const messageInput = document.getElementById('message-input');
+const messages = document.getElementById('messages');
+const sendPrivateMessageButton = document.getElementById('send-private-message');
+const privateMessageInput = document.getElementById('private-message-input');
+const privateMessagesBox = document.getElementById('private-messages-box');
+const notificationBell = document.getElementById('notification-bell');
+const notificationCount = document.getElementById('notification-count');
+const skeletonScreen = document.getElementById('skeleton-screen');
+
+createRoomButton.addEventListener('click', () => {
+    const roomName = prompt('Enter room name:');
+    if (roomName) {
+        const newRoom = document.createElement('li');
+        newRoom.innerHTML = `<a href="#${roomName}">${roomName}</a>`;
+        roomList.appendChild(newRoom);
+    }
+});
+
+sendMessageButton.addEventListener('click', () => {
+    const message = messageInput.value.trim();
+    if (message) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        messages.appendChild(messageElement);
+        messageInput.value = '';
+    }
+});
+
+sendPrivateMessageButton.addEventListener('click', () => {
+    const privateMessage = privateMessageInput.value.trim();
+    if (privateMessage) {
+        const privateMessageElement = document.createElement('div');
+        privateMessageElement.textContent = privateMessage;
+        privateMessagesBox.appendChild(privateMessageElement);
+        privateMessageInput.value = '';
+        incrementNotificationCount();
+    }
+});
+
+function incrementNotificationCount() {
+    let count = parseInt(notificationCount.textContent);
+    count += 1;
+    notificationCount.textContent = count;
+}
+
+function setStatusIndicator(status) {
+    const statusIndicator = document.createElement('span');
+    statusIndicator.classList.add('status-indicator', status);
+    return statusIndicator;
+}
+
+// Example usage
+const userStatus = setStatusIndicator('online');
+document.body.appendChild(userStatus);
+
+const adminStatus = setStatusIndicator('busy');
+document.body.appendChild(adminStatus);
+
+// Add friends, block friends, unblock friends
+function addFriend(username) {
+    console.log(`${username} added as a friend`);
+}
+
+function blockFriend(username) {
+    console.log(`${username} blocked`);
+}
+
+function unblockFriend(username) {
+    console.log(`${username} unblocked`);
+}
+
+// Machine learning for predicting user behavior and cyber threats
+function predictUserBehavior(userData) {
+    // Implement machine learning model here
+    console.log('Predicting user behavior...');
+}
+
+function detectCyberThreats(activityData) {
+    // Implement machine learning model here
+    console.log('Detecting cyber threats...');
+}
+
+// Show skeleton screen on page load
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        skeletonScreen.style.display = 'none';
+    }, 2000); // Adjust the timeout as needed
+});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunChat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <header>
+            <h1>FunChat</h1>
+            <button id="create-room">Create Room</button>
+            <div class="notification-bell" id="notification-bell">
+                🔔
+                <span class="notification-count" id="notification-count">0</span>
+            </div>
+        </header>
+        <nav>
+            <ul id="room-list">
+                <li><a href="#admin-room">Admin Room</a></li>
+                <!-- User-created rooms will be added here -->
+            </ul>
+        </nav>
+        <main>
+            <section id="chat-room">
+                <h2>Chat Room</h2>
+                <div id="messages" class="neumorphism-scrollbar"></div>
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button id="send-message">Send</button>
+            </section>
+            <section id="private-messages">
+                <h2>Private Messages</h2>
+                <div id="private-messages-box" class="neumorphism-scrollbar"></div>
+                <input type="text" id="private-message-input" placeholder="Type a private message...">
+                <button id="send-private-message">Send</button>
+            </section>
+        </main>
+        <div id="skeleton-screen" class="skeleton-screen">
+            <div class="skeleton-header"></div>
+            <div class="skeleton-content"></div>
+            <div class="skeleton-footer"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.chat-container {
+    width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header, nav, main {
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+#messages, #private-messages-box {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#message-input, #private-message-input {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.notification-bell {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.notification-bell:hover {
+    transform: rotate(15deg);
+}
+
+.notification-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 12px;
+}
+
+.neumorphism-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #007bff #f0f0f0;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar {
+    width: 12px;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    border-radius: 10px;
+    border: 3px solid #f0f0f0;
+}
+
+.skeleton-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.skeleton-header, .skeleton-content, .skeleton-footer {
+    width: 80%;
+    height: 20px;
+    background-color: #e0e0e0;
+    margin: 10px 0;
+    border-radius: 5px;
+    animation: pulse 1.5s infinite;
+}
+
+.skeleton-content {
+    height: 100px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { background-color: #e0e0e0; }
+    50% { background-color: #f0f0f0; }
+    100% { background-color: #e0e0e0; }
+}
+const createRoomButton = document.getElementById('create-room');
+const roomList = document.getElementById('room-list');
+const sendMessageButton = document.getElementById('send-message');
+const messageInput = document.getElementById('message-input');
+const messages = document.getElementById('messages');
+const sendPrivateMessageButton = document.getElementById('send-private-message');
+const privateMessageInput = document.getElementById('private-message-input');
+const privateMessagesBox = document.getElementById('private-messages-box');
+const notificationBell = document.getElementById('notification-bell');
+const notificationCount = document.getElementById('notification-count');
+const skeletonScreen = document.getElementById('skeleton-screen');
+
+createRoomButton.addEventListener('click', () => {
+    const roomName = prompt('Enter room name:');
+    if (roomName) {
+        const newRoom = document.createElement('li');
+        newRoom.innerHTML = `<a href="#${roomName}">${roomName}</a>`;
+        roomList.appendChild(newRoom);
+    }
+});
+
+sendMessageButton.addEventListener('click', () => {
+    const message = messageInput.value.trim();
+    if (message) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        messages.appendChild(messageElement);
+        messageInput.value = '';
+    }
+});
+
+sendPrivateMessageButton.addEventListener('click', () => {
+    const privateMessage = privateMessageInput.value.trim();
+    if (privateMessage) {
+        const privateMessageElement = document.createElement('div');
+        privateMessageElement.textContent = privateMessage;
+        privateMessagesBox.appendChild(privateMessageElement);
+        privateMessageInput.value = '';
+        incrementNotificationCount();
+    }
+});
+
+function incrementNotificationCount() {
+    let count = parseInt(notificationCount.textContent);
+    count += 1;
+    notificationCount.textContent = count;
+}
+
+function setStatusIndicator(status) {
+    const statusIndicator = document.createElement('span');
+    statusIndicator.classList.add('status-indicator', status);
+    return statusIndicator;
+}
+
+// Example usage
+const userStatus = setStatusIndicator('online');
+document.body.appendChild(userStatus);
+
+const adminStatus = setStatusIndicator('busy');
+document.body.appendChild(adminStatus);
+
+// Add friends, block friends, unblock friends
+function addFriend(username) {
+    console.log(`${username} added as a friend`);
+}
+
+function blockFriend(username) {
+    console.log(`${username} blocked`);
+}
+
+function unblockFriend(username) {
+    console.log(`${username} unblocked`);
+}
+
+// Machine learning for predicting user behavior and cyber threats
+function predictUserBehavior(userData) {
+    // Implement machine learning model here
+    console.log('Predicting user behavior...');
+}
+
+function detectCyberThreats(activityData) {
+    // Implement machine learning model here
+    console.log('Detecting cyber threats...');
+}
+
+// Show skeleton screen on page load
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        skeletonScreen.style.display = 'none';
+    }, 2000); // Adjust the timeout as needed
+});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunChat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <header>
+            <h1>FunChat</h1>
+            <button id="create-room">Create Room</button>
+            <div class="notification-bell" id="notification-bell">
+                🔔
+                <span class="notification-count" id="notification-count">0</span>
+            </div>
+        </header>
+        <nav>
+            <ul id="room-list">
+                <li><a href="#admin-room">Admin Room</a></li>
+                <!-- User-created rooms will be added here -->
+            </ul>
+        </nav>
+        <main>
+            <section id="chat-room">
+                <h2>Chat Room</h2>
+                <div id="messages" class="neumorphism-scrollbar"></div>
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button id="send-message">Send</button>
+            </section>
+            <section id="private-messages">
+                <h2>Private Messages</h2>
+                <div id="private-messages-box" class="neumorphism-scrollbar"></div>
+                <input type="text" id="private-message-input" placeholder="Type a private message...">
+                <button id="send-private-message">Send</button>
+            </section>
+        </main>
+        <div id="skeleton-screen" class="skeleton-screen">
+            <div class="skeleton-header"></div>
+            <div class="skeleton-content"></div>
+            <div class="skeleton-footer"></div>
+        </div>
+        <audio id="audio-player" controls>
+            <source src="your-audio-file.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.chat-container {
+    width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header, nav, main {
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+#messages, #private-messages-box {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#message-input, #private-message-input {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.notification-bell {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.notification-bell:hover {
+    transform: rotate(15deg);
+}
+
+.notification-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 12px;
+}
+
+.neumorphism-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #007bff #f0f0f0;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar {
+    width: 12px;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.neumorphism-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    border-radius: 10px;
+    border: 3px solid #f0f0f0;
+}
+
+.skeleton-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.skeleton-header, .skeleton-content, .skeleton-footer {
+    width: 80%;
+    height: 20px;
+    background-color: #e0e0e0;
+    margin: 10px 0;
+    border-radius: 5px;
+    animation: pulse 1.5s infinite;
+}
+
+.skeleton-content {
+    height: 100px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { background-color: #e0e0e0; }
+    50% { background-color: #f0f0f0; }
+    100% { background-color: #e0e0e0; }
+}
+
+.animated-username {
+    display: inline-block;
+    transition: transform 0.2s;
+}
+const createRoomButton = document.getElementById('create-room');
+const roomList = document.getElementById('room-list');
+const sendMessageButton = document.getElementById('send-message');
+const messageInput = document.getElementById('message-input');
+const messages = document.getElementById('messages');
+const sendPrivateMessageButton = document.getElementById('send-private-message');
+const privateMessageInput = document.getElementById('private-message-input');
+const privateMessagesBox = document.getElementById('private-messages-box');
+const notificationBell = document.getElementById('notification-bell');
+const notificationCount = document.getElementById('notification-count');
+const skeletonScreen = document.getElementById('skeleton-screen');
+const audioPlayer = document.getElementById('audio-player');
+
+createRoomButton.addEventListener('click', () => {
+    const roomName = prompt('Enter room name:');
+    if (roomName) {
+        const newRoom = document.createElement('li');
+        newRoom.innerHTML = `<a href="#${roomName}">${roomName}</a>`;
+        roomList.appendChild(newRoom);
+    }
+});
+
+sendMessageButton.addEventListener('click', () => {
+    const message = messageInput.value.trim();
+    if (message) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        messages.appendChild(messageElement);
+        messageInput.value = '';
+    }
+});
+
+sendPrivateMessageButton.addEventListener('click', () => {
+    const privateMessage = privateMessageInput.value.trim();
+    if (privateMessage) {
+        const privateMessageElement = document.createElement('div');
+        privateMessageElement.textContent = privateMessage;
+        privateMessagesBox.appendChild(privateMessageElement);
+        privateMessageInput.value = '';
+        incrementNotificationCount();
+    }
+});
+
+function incrementNotificationCount() {
+    let count = parseInt(notificationCount.textContent);
+    count += 1;
+    notificationCount.textContent = count;
+}
+
+function setStatusIndicator(status) {
+    const statusIndicator = document.createElement('span');
+    statusIndicator.classList.add('status-indicator', status);
+    return statusIndicator;
+}
+
+// Example usage
+const userStatus = setStatusIndicator('online');
+document.body.appendChild(userStatus);
+
+const adminStatus = setStatusIndicator('busy');
+document.body.appendChild(adminStatus);
+
+// Add friends, block friends, unblock friends
+function addFriend(username) {
+    console.log(`${username} added as a friend`);
+}
+
+function blockFriend(username) {
+    console.log(`${username} blocked`);
+}
+
+function unblockFriend(username) {
+    console.log(`${username} unblocked`);
+}
+
+// Machine learning for predicting user behavior and cyber threats
+function predictUserBehavior(userData) {
+    // Implement machine learning model here
+    console.log('Predicting user behavior...');
+}
+
+function detectCyberThreats(activityData) {
+    // Implement machine learning model here
+    console[_{{{CITATION{{{_1{](https://github.com/Hami-Lemon/note/tree/8e7ae5b41e53c2cf9d2c6418e30c87123b8037b4/Java%2Fweb%E5%BC%80%E5%8F%91%2F%E5%89%8D%E7%AB%AF.md)

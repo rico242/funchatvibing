@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neumorphism Chatroom</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chatroom">
+        <header>
+            <h1>Neumorphism Chatroom</h1>
+            <button id="toggle-mode">Toggle Dark/Light Mode</button>
+        </header>
+        <div class="chat-area">
+            <div class="message">
+                <div class="profile-pic"></div>
+                <div class="message-content">
+                    <p>Hello, this is a message!</p>
+                    <div class="reactions">
+                        <button class="like">👍</button>
+                        <button class="dislike">👎</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <input type="text" placeholder="Type a message...">
+            <button>Send</button>
+        </footer>
+    </div>
+    <audio id="audio-player" controls>
+        <source src="audio-file.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e0e0e0;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+.chatroom {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 10px 10px 20px #bebebe, -10px -10px 20px #ffffff;
+}
+
+header, footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-area {
+    margin: 20px 0;
+}
+
+.message {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-right: 10px;
+    box-shadow: inset 5px 5px 10px #bebebe, inset -5px -5px 10px #ffffff;
+}
+
+.message-content {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px #bebebe, -5px -5px 10px #ffffff;
+}
+
+.reactions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px #bebebe, -5px -5px 10px #ffffff;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+
+button:hover {
+    box-shadow: 5px 5px 15px #bebebe, -5px -5px 15px #ffffff;
+}
+
+#toggle-mode {
+    padding: 10px 20px;
+}
+document.getElementById('toggle-mode').addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <video id="video" width="640" height="480" autoplay></video>
+        <button id="login-button">Login with Face Recognition</button>
+        <p id="age-info"></p>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+video {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+const video = document.getElementById('video');
+const loginButton = document.getElementById('login-button');
+const ageInfo = document.getElementById('age-info');
+
+// Load face-api.js models
+Promise.all([
+    faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+    faceapi.nets.ageGenderNet.loadFromUri('/models')
+]).then(startVideo);
+
+function startVideo() {
+    navigator.getUserMedia(
+        { video: {} },
+        stream => video.srcObject = stream,
+        err => console.error(err)
+    );
+}
+
+loginButton.addEventListener('click', async () => {
+    const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withAgeAndGender();
+    if (detections.length > 0) {
+        const age = detections[0].age;
+        ageInfo.textContent = `Detected age: ${Math.round(age)}`;
+        // Implement your login logic here
+    } else {
+        ageInfo.textContent = 'No face detected. Please try again.';
+    }
+});<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Controlled Audio Player</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="audio-player">
+        <audio id="audio" controls>
+            <source src="audio-file.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+        <canvas id="visualizer"></canvas>
+        <button id="start-recognition">Start Recognition</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.audio-player {
+    text-align: center;
+}
+
+canvas {
+    display: block;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+const audio = document.getElementById('audio');
+const canvas = document.getElementById('visualizer');
+const startRecognitionButton = document.getElementById('start-recognition');
+const ctx = canvas.getContext('2d');
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+
+recognition.continuous = true;
+recognition.interimResults = false;
+
+recognition.onresult = (event) => {
+    const command = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+    if (command === 'play') {
+        audio.play();
+    } else if (command === 'pause') {
+        audio.pause();
+    } else if (command === 'stop') {
+        audio.pause();
+        audio.currentTime = 0;
+    }
+};
+
+startRecognitionButton.addEventListener('click', () => {
+    recognition.start();
+});
+
+audio.addEventListener('play', () => {
+    visualize();
+});
+
+function visualize() {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const analyser = audioContext.createAnalyser();
+    const source = audioContext.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    analyser.fftSize = 256;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    canvas.width = window.innerWidth;
+    canvas.height = 200;
+
+    function draw() {
+        requestAnimationFrame(draw);
+
+        analyser.getByteFrequencyData(dataArray);
+
+        ctx.fillStyle = '#f0f0f0';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const barWidth = (canvas.width / bufferLength) * 2.5;
+        let barHeight;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i];
+
+            ctx.fillStyle = 'rgb(' + (barHeight + 100) + ',50,50)';
+            ctx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight / 2);
+
+            x += barWidth + 1;
+        }
+    }
+
+    draw();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Call</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="video-call-container">
+        <video id="localVideo" autoplay muted></video>
+        <video id="remoteVideo" autoplay></video>
+        <div class="controls">
+            <button id="muteButton">Mute</button>
+            <button id="blockButton">Block</button>
+            <button id="unblockButton">Unblock</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.video-call-container {
+    text-align: center;
+}
+
+video {
+    width: 300px;
+    height: 200px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
+const muteButton = document.getElementById('muteButton');
+const blockButton = document.getElementById('blockButton');
+const unblockButton = document.getElementById('unblockButton');
+
+let localStream;
+let remoteStream;
+let isMuted = false;
+let isBlocked = false;
+
+// Get user media
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then(stream => {
+        localVideo.srcObject = stream;
+        localStream = stream;
+    })
+    .catch(error => console.error('Error accessing media devices.', error));
+
+// Mute/Unmute functionality
+muteButton.addEventListener('click', () => {
+    isMuted = !isMuted;
+    localStream.getAudioTracks()[0].enabled = !isMuted;
+    muteButton.textContent = isMuted ? 'Unmute' : 'Mute';
+});
+
+// Block/Unblock functionality
+blockButton.addEventListener('click', () => {
+    isBlocked = true;
+    remoteVideo.srcObject = null;
+});
+
+unblockButton.addEventListener('click', () => {
+    isBlocked = false;
+    remoteVideo.srcObject = remoteStream;
+});
+
+// Simulate receiving a remote stream (for demonstration purposes)
+setTimeout(() => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+            remoteStream = stream;
+            if (!isBlocked) {
+                remoteVideo.srcObject = stream;
+            }
+        })
+        .catch(error => console.error('Error accessing media devices.', error));
+}, 2000);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Call with Animated Profile Picture</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="video-call-container">
+        <video id="localVideo" autoplay muted></video>
+        <video id="remoteVideo" autoplay></video>
+        <div class="profile-container">
+            <img id="profilePic" src="profile-pic.gif" alt="Profile Picture">
+        </div>
+        <div class="controls">
+            <button id="muteButton">Mute</button>
+            <button id="blockButton">Block</button>
+            <button id="unblockButton">Unblock</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.video-call-container {
+    text-align: center;
+}
+
+video {
+    width: 300px;
+    height: 200px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.profile-container img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
+const muteButton = document.getElementById('muteButton');
+const blockButton = document.getElementById('blockButton');
+const unblockButton = document.getElementById('unblockButton');
+
+let localStream;
+let remoteStream;
+let isMuted = false;
+let isBlocked = false;
+
+// Get user media
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then(stream => {
+        localVideo.srcObject = stream;
+        localStream = stream;
+    })
+    .catch(error => console.error('Error accessing media devices.', error));
+
+// Mute/Unmute functionality
+muteButton.addEventListener('click', () => {
+    isMuted = !isMuted;
+    localStream.getAudioTracks()[0].enabled = !isMuted;
+    muteButton.textContent = isMuted ? 'Unmute' : 'Mute';
+});
+
+// Block/Unblock functionality
+blockButton.addEventListener('click', () => {
+    isBlocked = true;
+    remoteVideo.srcObject = null;
+});
+
+unblockButton.addEventListener('click', () => {
+    isBlocked = false;
+    remoteVideo.srcObject = remoteStream;
+});
+
+// Simulate receiving a remote stream (for demonstration purposes)
+setTimeout(() => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+            remoteStream = stream;
+            if (!isBlocked) {
+                remoteVideo.srcObject = stream;
+            }
+        })
+        .catch(error => console.error('Error accessing media devices.', error));
+}, 2000);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Command Video Call</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="video-call-container">
+        <video id="localVideo" autoplay muted></video>
+        <video id="remoteVideo" autoplay></video>
+        <div class="controls">
+            <button id="start-recognition">Start Voice Commands</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.video-call-container {
+    text-align: center;
+}
+
+video {
+    width: 300px;
+    height: 200px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
+const startRecognitionButton = document.getElementById('start-recognition');
+
+let localStream;
+let remoteStream;
+let isMuted = false;
+let isBlocked = false;
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+
+recognition.continuous = true;
+recognition.interimResults = false;
+
+recognition.onresult = (event) => {
+    const command = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+    if (command === 'mute') {
+        muteUser();
+    } else if (command === 'unmute') {
+        unmuteUser();
+    } else if (command === 'block') {
+        blockUser();
+    } else if (command === 'unblock') {
+        unblockUser();
+    }
+};
+
+startRecognitionButton.addEventListener('click', () => {
+    recognition.start();
+});
+
+function muteUser() {
+    isMuted = true;
+    localStream.getAudioTracks()[0].enabled = false;
+    console.log('User muted');
+}
+
+function unmuteUser() {
+    isMuted = false;
+    localStream.getAudioTracks()[0].enabled = true;
+    console.log('User unmuted');
+}
+
+function blockUser() {
+    isBlocked = true;
+    remoteVideo.srcObject = null;
+    console.log('User blocked');
+}
+
+function unblockUser() {
+    isBlocked = false;
+    remoteVideo.srcObject = remoteStream;
+    console.log('User unblocked');
+}
+
+// Get user media
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then(stream => {
+        localVideo.srcObject = stream;
+        localStream = stream;
+    })
+    .catch(error => console.error('Error accessing media devices.', error));
+
+// Simulate receiving a remote stream (for demonstration purposes)
+setTimeout(() => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+            remoteStream = stream;
+            if (!isBlocked) {
+                remoteVideo.srcObject = stream;
+            }
+        })
+        .catch(error => console.error('Error accessing media devices.', error));
+}, 2000);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Voice Command Control</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="video-call-container">
+        <video id="localVideo" autoplay muted></video>
+        <video id="remoteVideo" autoplay></video>
+        <canvas id="visualizer"></canvas>
+        <div class="controls">
+            <button id="start-recognition">Start Voice Commands</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.video-call-container {
+    text-align: center;
+}
+
+video {
+    width: 300px;
+    height: 200px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+canvas {
+    display: block;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
+const startRecognitionButton = document.getElementById('start-recognition');
+const canvas = document.getElementById('visualizer');
+const ctx = canvas.getContext('2d');
+
+let localStream;
+let remoteStream;
+let isMuted = false;
+let isBlocked = false;
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+
+recognition.continuous = true;
+recognition.interimResults = false;
+
+recognition.onresult = (event) => {
+    const command = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+    if (command === 'mute') {
+        muteUser();
+    } else if (command === 'unmute') {
+        unmuteUser();
+    } else if (command === 'block') {
+        blockUser();
+    } else if (command === 'unblock') {
+        unblockUser();
+    } else if (command === 'ban') {
+        banUser();
+    }
+};
+
+startRecognitionButton.addEventListener('click', () => {
+    recognition.start();
+});
+
+function muteUser() {
+    isMuted = true;
+    localStream.getAudioTracks()[0].enabled = false;
+    console.log('User muted');
+}
+
+function unmuteUser() {
+    isMuted = false;
+    localStream.getAudioTracks()[0].enabled = true;
+    console.log('User unmuted');
+}
+
+function blockUser() {
+    isBlocked = true;
+    remoteVideo.srcObject = null;
+    console.log('User blocked');
+}
+
+function unblockUser() {
+    isBlocked = false;
+    remoteVideo.srcObject = remoteStream;
+    console.log('User unblocked');
+}
+
+function banUser() {
+    console.log('User banned');
+    // Implement your ban logic here
+}
+
+// Get user media
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then(stream => {
+        localVideo.srcObject = stream;
+        localStream = stream;
+    })
+    .catch(error => console.error('Error accessing media devices.', error));
+
+// Simulate receiving a remote stream (for demonstration purposes)
+setTimeout(() => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+            remoteStream = stream;
+            if (!isBlocked) {
+                remoteVideo.srcObject = stream;
+            }
+        })
+        .catch(error => console.error('Error accessing media devices.', error));
+}, 2000);
+
+// Audio wave visualization
+function visualize() {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const analyser = audioContext.createAnalyser();
+    const source = audioContext.createMediaElementSource(localVideo);
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    analyser.fftSize = 256;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    canvas.width = window.innerWidth;
+    canvas.height = 200;
+
+    function draw() {
+        requestAnimationFrame(draw);
+
+        analyser.getByteFrequencyData(dataArray);
+
+        ctx.fillStyle = '#f0f0f0';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const barWidth = (canvas.width / bufferLength) * 2.5;
+        let barHeight;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i];
+
+            ctx.fillStyle = 'rgb(' + (barHeight + 100) + ',50,50)';
+            ctx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight / 2);
+
+            x += barWidth + 1;
+        }
+    }
+
+    draw();
+}
+
+visualize();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Chatbot</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chat-box"></div>
+        <input type="text" id="chat-input" placeholder="Type a message...">
+        <button id="send-button">Send</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.chat-container {
+    width: 400px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#chat-box {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#chat-input {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#send-button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#send-button:hover {
+    background-color: #0056b3;
+}
+const chatBox = document.getElementById('chat-box');
+const chatInput = document.getElementById('chat-input');
+const sendButton = document.getElementById('send-button');
+
+const bannedWords = ['badword1', 'badword2', 'badword3']; // Add more words as needed
+const bannedPhrases = ['bad phrase 1', 'bad phrase 2']; // Add more phrases as needed
+const bannedLinks = ['spamlink1.com', 'spamlink2.com']; // Add more links as needed
+
+sendButton.addEventListener('click', () => {
+    const message = chatInput.value.trim();
+    if (message) {
+        if (containsBannedContent(message)) {
+            alert('Your message contains inappropriate content and cannot be sent.');
+        } else {
+            addMessageToChatBox('User', message);
+        }
+        chatInput.value = '';
+    }
+});
+
+function containsBannedContent(message) {
+    const lowerCaseMessage = message.toLowerCase();
+    for (const word of bannedWords) {
+        if (lowerCaseMessage.includes(word)) {
+            return true;
+        }
+    }
+    for (const phrase of bannedPhrases) {
+        if (lowerCaseMessage.includes(phrase)) {
+            return true;
+        }
+    }
+    for (const link of bannedLinks) {
+        if (lowerCaseMessage.includes(link)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function addMessageToChatBox(sender, message) {
+    const messageElement = document.createElement('div');
+    messageElement.textContent = `${sender}: ${message}`;
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunChat Game Streaming</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="streaming-container">
+        <video id="localVideo" autoplay muted></video>
+        <video id="remoteVideo" autoplay></video>
+        <div class="controls">
+            <button id="start-stream">Start Streaming</button>
+            <button id="stop-stream">Stop Streaming</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.streaming-container {
+    text-align: center;
+}
+
+video {
+    width: 300px;
+    height: 200px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
+const startStreamButton = document.getElementById('start-stream');
+const stopStreamButton = document.getElementById('stop-stream');
+
+let localStream;
+let peerConnection;
+const config = {
+    iceServers: [
+        {
+            urls: 'stun:stun.l.google.com:19302'
+        }
+    ]
+};
+
+startStreamButton.addEventListener('click', startStreaming);
+stopStreamButton.addEventListener('click', stopStreaming);
+
+function startStreaming() {
+    navigator.mediaDevices.getDisplayMedia({ video: true, audio: true })
+        .then(stream => {
+            localVideo.srcObject = stream;
+            localStream = stream;
+            setupPeerConnection();
+        })
+        .catch(error => console.error('Error accessing display media.', error));
+}
+
+function stopStreaming() {
+    localStream.getTracks().forEach(track => track.stop());
+    if (peerConnection) {
+        peerConnection.close();
+    }
+}
+
+function setupPeerConnection() {
+    peerConnection = new RTCPeerConnection(config);
+
+    peerConnection.onicecandidate = event => {
+        if (event.candidate) {
+            // Send the candidate to the remote peer
+        }
+    };
+
+    peerConnection.ontrack = event => {
+        remoteVideo.srcObject = event.streams[0];
+    };
+
+    localStream.getTracks().forEach(track => {
+        peerConnection.addTrack(track, localStream);
+    });
+
+    peerConnection.createOffer()
+        .then(offer => peerConnection.setLocalDescription(offer))
+        .then(() => {
+            // Send the offer to the remote peer
+        })
+        .catch(error => console.error('Error creating offer.', error));
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunChat Game Streaming</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="streaming-container">
+        <video id="localVideo" autoplay muted></video>
+        <video id="remoteVideo" autoplay></video>
+        <div class="controls">
+            <select id="game-select">
+                <option value="game1">Game 1</option>
+                <option value="game2">Game 2</option>
+                <option value="game3">Game 3</option>
+            </select>
+            <button id="start-stream">Start Streaming</button>
+            <button id="stop-stream">Stop Streaming</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.streaming-container {
+    text-align: center;
+}
+
+video {
+    width: 300px;
+    height: 200px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+button, select {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover, select:hover {
+    background-color: #0056b3;
+}
+const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
+const startStreamButton = document.getElementById('start-stream');
+const stopStreamButton = document.getElementById('stop-stream');
+const gameSelect = document.getElementById('game-select');
+
+let localStream;
+let peerConnection;
+const config = {
+    iceServers: [
+        {
+            urls: 'stun:stun.l.google.com:19302'
+        }
+    ]
+};
+
+startStreamButton.addEventListener('click', startStreaming);
+stopStreamButton.addEventListener('click', stopStreaming);
+
+function startStreaming() {
+    const selectedGame = gameSelect.value;
+    console.log(`Starting stream for ${selectedGame}`);
+    navigator.mediaDevices.getDisplayMedia({ video: true, audio: true })
+        .then(stream => {
+            localVideo.srcObject = stream;
+            localStream = stream;
+            setupPeerConnection();
+        })
+        .catch(error => console.error('Error accessing display media.', error));
+}
+
+function stopStreaming() {
+    localStream.getTracks().forEach(track => track.stop());
+    if (peerConnection) {
+        peerConnection.close();
+    }
+}
+
+function setupPeerConnection() {
+    peerConnection = new RTCPeerConnection(config);
+
+    peerConnection.onicecandidate = event => {
+        if (event.candidate) {
+            // Send the candidate to the remote peer
+        }
+    };
+
+    peerConnection.ontrack = event => {
+        remoteVideo.srcObject = event.streams[0];
+    };
+
+    localStream.getTracks().forEach(track => {
+        peerConnection.addTrack(track, localStream);
+    });
+
+    peerConnection.createOffer()
+        .then(offer => peerConnection.setLocalDescription(offer))
+        .then(() => {
+            // Send the offer to the remote peer
+        })
+        .catch(error => console.error('Error creating offer.', error));
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunChat Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>FunChat Admin Dashboard</h1>
+            <button id="toggle-mode">Toggle Dark/Light Mode</button>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="#face-recognition">Face Recognition</a></li>
+                <li><a href="#history">History</a></li>
+                <li><a href="#geo-blocking">Geo Blocking</a></li>
+                <li><a href="#video-games">Video Games</a></li>
+                <li><a href="#video-call">Video Call</a></li>
+                <li><a href="#settings">Settings</a></li>
+                <li><a href="#user-settings">User Settings</a></li>
+                <li><a href="#reports">Reports</a></li>
+            </ul>
+        </nav>
+        <main>
+            <section id="face-recognition">
+                <h2>Face Recognition</h2>
+                <video id="video" width="640" height="480" autoplay></video>
+                <button id="login-button">Login with Face Recognition</button>
+                <p id="status"></p>
+            </section>
+            <section id="history">
+                <h2>History</h2>
+                <div id="ban-history">Ban History</div>
+                <div id="mute-history">Mute History</div>
+                <div id="block-history">Block History</div>
+                <div id="unblock-history">Unblock History</div>
+                <div id="spamming-history">Spamming History</div>
+                <div id="link-history">Link History</div>
+                <div id="profanity-history">Profanity Words Filter History</div>
+                <button id="add-profanity-word">Add New Profanity Word</button>
+            </section>
+            <section id="geo-blocking">
+                <h2>Geo Blocking</h2>
+                <button id="add-geo-block">Add Geo Block</button>
+            </section>
+            <section id="video-games">
+                <h2>Video Games</h2>
+                <div id="upcoming-games">Upcoming Video Games</div>
+                <button id="delete-old-games">Delete Old Video Games</button>
+            </section>
+            <section id="video-call">
+                <h2>Video Call</h2>
+                <video id="localVideo" autoplay muted></video>
+                <video id="remoteVideo" autoplay></video>
+                <div id="cartoon-filters">Cartoon Filters</div>
+            </section>
+            <section id="settings">
+                <h2>Settings</h2>
+                <div id="admin-settings">
+                    <div id="ban-unban">Ban/Unban</div>
+                    <div id="kick-unkick">Kick/Unkick</div>
+                    <div id="mute-unmute">Mute/Unmute</div>
+                    <div id="admin-list">Admin List</div>
+                </div>
+            </section>
+            <section id="user-settings">
+                <h2>User Settings</h2>
+                <div id="deactivate-account">Deactivate Account</div>
+                <div id="change-username">Change Username</div>
+                <div id="change-animation-profile">Change Animation Profile</div>
+                <div id="color-palette">Color Palette</div>
+                <div id="audio-player">Audio Player</div>
+            </section>
+            <section id="reports">
+                <h2>Reports</h2>
+                <div id="report-function">Report Function</div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+    background-color: #333;
+    color: #f0f0f0;
+}
+
+.dashboard-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 10px 10px 20px #bebebe, -10px -10px 20px #ffffff;
+}
+
+header, nav, main {
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px #bebebe, -5px -5px 10px #ffffff;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+
+button:hover {
+    box-shadow: 5px 5px 15px #bebebe, -5px -5px 15px #ffffff;
+}
+
+#video, #localVideo, #remoteVideo {
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px #bebebe, -5px -5px 10px #ffffff;
+}
+const video = document.getElementById('video');
+const loginButton = document.getElementById('login-button');
+const status = document.getElementById('status');
+const toggleModeButton = document.getElementById('toggle-mode');
+
+const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
+
+let localStream;
+let remoteStream;
+let isMuted = false;
+let isBlocked = false;
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+
+recognition.continuous = true;
+recognition.interimResults = false;
+
+recognition.onresult = (event) => {
+    const command = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+    if (command === 'mute') {
+        muteUser();
+    } else if (command === 'unmute') {
+        unmuteUser();
+    } else if (command === 'block') {
+        blockUser();
+    } else if (command === 'unblock') {
+        unblockUser();
+    } else if (command === 'ban') {
+        banUser();
+    }
+};
+
+toggleModeButton.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+});
+
+loginButton.addEventListener('click', async () => {
+    const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors();
+    if (detections.length > 0) {
+        const faceMatcher = new faceapi.FaceMatcher(detections);
+        const bestMatch = faceMatcher.findBestMatch(detections[0].descriptor);
+        if (bestMatch.label !== 'unknown') {
+            status.textContent = 'Login successful!';
+            // Implement your login logic here
+        } else {
+            status.textContent = 'Face not recognized. Please try again.';
+        }
+    } else {
+        status.textContent = 'No face detected. Please try again.';
+    }
+});
+
+function muteUser() {
+    isMuted = true;
+    localStream.getAudioTracks()[0].enabled = false;
+    console.log('User muted');
+}
+
+function unmuteUser() {
+    isMuted = false;
+    localStream.getAudioTracks()[0].enabled = true;
+    console.log('User unmuted');
+}
+
+function blockUser() {
+    isBlocked = true;
+    remoteVideo.srcObject = null;
+    console.log('User blocked');
+}
+
+function unblockUser() {
+    isBlocked = false;
+    remoteVideo.srcObject = remoteStream;
+    console.log('User unblocked');
+}
+
+function banUser() {
+    console.log('User banned');
+    // Implement your ban logic here
+}
+
+// Get user media
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then(stream => {
+        localVideo.srcObject = stream;
+        localStream = stream;
+    })
+    .catch(error => console.error('Error accessing media devices.', error));
+
+// Simulate receiving a remote stream (for demonstration purposes)
+setTimeout(() => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+            remoteStream = stream;
+            if (!isBlocked) {
+                remoteVideo.srcObject = stream;
+            }
+        })
+        .catch(error => console.error('Error accessing media devices.', error));
+}, 2000);
+
+// Audio wave visualization
+function visualize() {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const analyser<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FunChat Video Call</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="video-call-container">
+            <video id="localVideo" autoplay muted></video>
+            <video id="remoteVideo" autoplay></video>
+            <div class="controls">
+                <button id="muteButton">Mute</button>
+                <button id="unmuteButton">Unmute</button>
+                <button id="blockButton">Block</button>
+                <button id="unblockButton">Unblock</button>
+            </div>
+        </div>
+        <script src="script.js"></script>
+    </body>
+    </html>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    
+    .video-call-container {
+        text-align: center;
+    }
+    
+    video {
+        width: 300px;
+        height: 200px;
+        margin: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .controls {
+        margin-top: 20px;
+    }
+    
+    button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    button:hover {
+        background-color: #0056b3;
+    }
+    const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
+const muteButton = document.getElementById('muteButton');
+const unmuteButton = document.getElementById('unmuteButton');
+const blockButton = document.getElementById('blockButton');
+const unblockButton = document.getElementById('unblockButton');
+
+let localStream;
+let remoteStream;
+let isMuted = false;
+let isBlocked = false;
+
+// Get user media
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then(stream => {
+        localVideo.srcObject = stream;
+        localStream = stream;
+    })
+    .catch(error => console.error('Error accessing media devices.', error));
+
+// Mute/Unmute functionality
+muteButton.addEventListener('click', () => {
+    isMuted = true;
+    localStream.getAudioTracks()[0].enabled = false;
+    console.log('User muted');
+});
+
+unmuteButton.addEventListener('click', () => {
+    isMuted = false;
+    localStream.getAudioTracks()[0].enabled = true;
+    console.log('User unmuted');
+});
+
+// Block/Unblock functionality
+blockButton.addEventListener('click', () => {
+    isBlocked = true;
+    remoteVideo.srcObject = null;
+    console.log('User blocked');
+});
+
+unblockButton.addEventListener('click', () => {
+    isBlocked = false;
+    remoteVideo.srcObject = remoteStream;
+    console.log('User unblocked');
+});
+
+// Simulate receiving a remote stream (for demonstration purposes)
+setTimeout(() => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+            remoteStream = stream;
+            if (!isBlocked) {
+                remoteVideo.srcObject = stream;
+            }
+        })
+        .catch(error => console.error('Error accessing media devices.', error));
+}, 2000);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunChat Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>FunChat Admin Dashboard</h1>
+            <button id="toggle-mode">Toggle Dark/Light Mode</button>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="#face-recognition">Face Recognition</a></li>
+                <li><a href="#history">History</a></li>
+                <li><a href="#geo-blocking">Geo Blocking</a></li>
+                <li><a href="#video-games">Video Games</a></li>
+                <li><a href="#video-call">Video Call</a></li>
+                <li><a href="#settings">Settings</a></li>
+                <li><a href="#user-settings">User Settings</a></li>
+                <li><a href="#reports">Reports</a></li>
+            </ul>
+        </nav>
+        <main>
+            <section id="face-recognition">
+                <h2>Face Recognition</h2>
+                <video id="video" width="640" height="480" autoplay></video>
+                <button id="login-button">Login with Face Recognition</button>
+                <p id="status"></p>
+            </section>
+            <section id="history">
+                <h2>History</h2>
+                <div id="ban-history">Ban History</div>
+                <div id="mute-history">Mute History</div>
+                <div id="block-history">Block History</div>
+                <div id="unblock-history">Unblock History</div>
+                <div id="spamming-history">Spamming History</div>
+                <div id="link-history">Link History</div>
+                <div id="profanity-history">Profanity Words Filter History</div>
+                <button id="add-profanity-word">Add New Profanity Word</button>
+            </section>
+            <section id="geo-blocking">
+                <h2>Geo Blocking</h2>
+                <button id="add-geo-block">Add Geo Block</button>
+            </section>
+            <section id="video-games">
+                <h2>Video Games</h2>
+                <div id="upcoming-games">Upcoming Video Games</div>
+                <button id="delete-old-games">Delete Old Video Games</button>
+            </section>
+            <section id="video-call">
+                <h2>Video Call</h2>
+                <video id="localVideo" autoplay muted></video>
+                <video id="remoteVideo" autoplay></video>
+                <div id="cartoon-filters">Cartoon Filters</div>
+            </section>
+            <section id="settings">
+                <h2>Settings</h2>
+                <div id="admin-settings">
+                    <div id="ban-unban">Ban/Unban</div>
+                    <div id="kick-unkick">Kick/Unkick</div>
+                    <div id="mute-unmute">Mute/Unmute</div>
+                    <div id="admin-list">Admin List</div>
+                </div>
+            </section>
+            <section id="user-settings">
+                <h2>User Settings</h2>
+                <div id="deactivate-account">Deactivate Account</div>
+                <div id="change-username">Change Username</div>
+                <div id="change-animation-profile">Change Animation Profile</div>
+                <div id="color-palette">Color Palette</div>
+                <div id="audio-player">Audio Player</div>
+            </section>
+            <section id="reports">
+                <h2>Reports</h2>
+                <div id="report-function">Report Function</div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+    background-color: #333;
+    color: #f0f0f0;
+}
+
+.dashboard-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 10px 10px 20px #bebebe, -10px -10px 20px #ffffff;
+}
+
+header, nav, main {
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px #bebebe, -5px -5px 10px #ffffff;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+
+button:hover {
+    box-shadow: 5px 5px 15px #bebebe, -5px -5px 15px #ffffff;
+}
+
+#video, #localVideo, #remoteVideo {
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px #bebebe, -5px -5px 10px #ffffff;
+}
+
+.animated-username {
+    display: inline-block;
+    animation: colorChange 2s infinite;
+}
+
+@keyframes colorChange {
+    0% { color: #007bff; }
+    50% { color: #ff007b; }
+    100% { color: #007bff; }
+}
+const video = document.getElementById('video');
+const loginButton = document.getElementById('login-button');
+const status = document.getElementById('status');
+const toggleModeButton = document.getElementById('toggle-mode');
+
+const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
+const muteButton = document.getElementById('muteButton');
+const unmuteButton = document.getElementById('unmuteButton');
+const blockButton = document.getElementById('blockButton');
+const unblockButton = document.getElementById('unblockButton');
+
+let localStream;
+let remoteStream;
+let isMuted = false;
+let isBlocked = false;
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+
+recognition.continuous = true;
+recognition.interimResults = false;
+
+recognition.onresult = (event) => {
+    const command = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+    if (command === 'mute') {
+        muteUser();
+    } else if (command === 'unmute') {
+        unmuteUser();
+    } else if (command === 'block') {
+        blockUser();
+    } else if (command === 'unblock') {
+        unblockUser();
+    } else if (command === 'ban') {
+        banUser();
+    }
+};
+
+toggleModeButton.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+});
+
+loginButton.addEventListener('click', async () => {
+    const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors();
+    if (detections.length > 0) {
+        const faceMatcher = new faceapi.FaceMatcher(detections);
+        const bestMatch = faceMatcher.findBestMatch(detections[0].descriptor);
+        if (bestMatch.label !== 'unknown') {
+            status.textContent = 'Login successful!';
+            // Implement your login logic here
+        } else {
+            status.textContent = 'Face not recognized. Please try again.';
+        }
+    } else {
+        status.textContent = 'No face detected. Please try again.';
+    }
+});
+
+function muteUser() {
+    isMuted = true;
+    localStream.getAudioTracks()[0].enabled = false;
+    console.log('User muted');
+}
+
+function unmuteUser() {
+    isMuted = false;
+    localStream.getAudioTracks()[0].enabled = true;
+    console.log('User unmuted');
+}
+
+function blockUser() {
+    isBlocked = true;
+    remoteVideo.srcObject = null;
+    console.log('User blocked');
+}
+
+function unblockUser() {
+    isBlocked = false;
+    remoteVideo.srcObject = remoteStream;
+    console.log('User unblocked');
+}
+
+function banUser() {
+    console.log('User banned');
+    // Implement your ban logic here
+}
+
+// Get user media
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then(stream => {
+        localVideo.srcObject = stream;
+        localStream = stream;
+    })
+    .catch(error => console.error('Error accessing media devices.', error));
+
+// Simulate[_{{{CITATION{{{_1{](https://github.com/StephenMercer/StephensCode/tree/4a5694be6beab4feed9ba061eb5c5ea57a031fd2/JavaScript%2FJSCourseCodeNotes%2F25_SelectingMultipleDOMElements.md)[_{{{CITATION{{{_2{](https://github.com/Hami-Lemon/note/tree/8e7ae5b41e53c2cf9d2c6418e30c87123b8037b4/Java%2Fweb%E5%BC%80%E5%8F%91%2F%E5%89%8D%E7%AB%AF.md)
